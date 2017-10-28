@@ -26,20 +26,20 @@ class FormDataSource: NSObject {
     
 }
 
-extension FormDataSource: UICollectionViewDataSource {
+extension FormDataSource: UITableViewDataSource {
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return Int(presenter?.sections ?? 0)
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fields(at: section).count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let field = fields(at: indexPath.section)[safe: indexPath.item],
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: field.cellType.cellIdentifier, for: indexPath) as? UICollectionViewCell & DequeueAbleCell else {
-                return UICollectionViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: field.cellType.cellIdentifier) as? UITableViewCell & DequeueAbleCell else {
+                return UITableViewCell()
         }
         
         cell.update(with: field)
@@ -60,7 +60,7 @@ private extension FormDataSource {
         return presenter.fields(for: UInt(section))
     }
     
-    func shouldBindRemoveOrAddAction(with field: FieldType, on cell: UICollectionViewCell, at index: IndexPath) {
+    func shouldBindRemoveOrAddAction(with field: FieldType, on cell: UITableViewCell, at index: IndexPath) {
         guard let cell = cell as? AddOrRemoveDoubleInputCell else {
             return
         }

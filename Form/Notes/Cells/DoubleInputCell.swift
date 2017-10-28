@@ -8,12 +8,12 @@
 
 import UIKit
 
-class DoubleInputCell: UICollectionViewCell, DequeueAbleCell, DynamicHeightCell {
+class DoubleInputCell: UITableViewCell, DequeueAbleCell {
     
     @IBOutlet weak var firstInputTitleLabel: UILabel!
     @IBOutlet weak var secondInputTitleLabel: UILabel!
-    @IBOutlet weak var firtInputTextView: UITextField!
-    @IBOutlet weak var secondInputTextView: UITextField!
+    @IBOutlet weak var firstInputTextField: UITextField!
+    @IBOutlet weak var secondInputTextField: UITextField!
     @IBOutlet weak var InvalidMessageLabel: UILabel!
     
     static var dequeueCell: FieldCellType {
@@ -23,17 +23,7 @@ class DoubleInputCell: UICollectionViewCell, DequeueAbleCell, DynamicHeightCell 
         return FieldCellType(cellIdentifier: doubleInputCellIdentifier,
                              nib: doubleInputNib)
     }
-    
-    private var isHeightCalculated = false
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        guard !isHeightCalculated else {
-            return layoutAttributes
-        }
-        
-        return calculateDynamicHeight(with: layoutAttributes)
-    }
-    
+
     func update(with field: FieldType) {
         guard case let .doubleInput(firstTitleInput, secondTitleInput, error) = field  else {
             return

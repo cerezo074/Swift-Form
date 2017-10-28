@@ -10,7 +10,7 @@ import UIKit
 
 class FormViewController: UIViewController {
     
-    @IBOutlet private weak var formCollectionView: UICollectionView!
+    @IBOutlet private weak var formTableView: UITableView!
     private var presenter: FormPresenterInterface
     private var dataSource: FormDataSource
     
@@ -42,16 +42,16 @@ private extension FormViewController {
     func configureFormCollectionView() {
         for section in 0 ..< presenter.sections {
             presenter.fields(for: section).forEach {
-                formCollectionView.register($0.cellType.nib,
-                                            forCellWithReuseIdentifier: $0.cellType.cellIdentifier)
+                formTableView.register($0.cellType.nib,
+                                       forCellReuseIdentifier: $0.cellType.cellIdentifier)
             }
         }
         
-        if let flowLayout = formCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.size.width, height: 100)
-        }
-        
-        formCollectionView.dataSource = dataSource
+        formTableView.tableFooterView = UIView(frame: .zero)
+        formTableView.rowHeight = UITableViewAutomaticDimension
+        formTableView.estimatedRowHeight = 100
+        formTableView.dataSource = dataSource
+        formTableView.delegate = self
     }
     
     func bindFormViewState() {
@@ -76,27 +76,27 @@ private extension FormViewController {
     }
     
     func addCell(at index: IndexPath) {
-        formCollectionView.insertItems(at: [index])
+        formTableView.insertRows(at: [index], with: .automatic)
     }
     
     func removeCell(at index: IndexPath) {
-        formCollectionView.deleteItems(at: [index])
+        formTableView.deleteRows(at: [index], with: .automatic)
     }
     
     func showResult(at index: IndexPath) {
-        formCollectionView.reloadItems(at: [index])
+        formTableView.reloadRows(at: [index], with: .automatic)
     }
     
     func showValidationError(at index: IndexPath) {
-        formCollectionView.reloadItems(at: [index])
+        formTableView.reloadRows(at: [index], with: .automatic)
     }
     
 }
 
-extension FormViewController: UICollectionViewDelegate {
+extension FormViewController: UITableViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }

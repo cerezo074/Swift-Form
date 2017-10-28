@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddOrRemoveDoubleInputCell: UICollectionViewCell, DequeueAbleCell, DynamicHeightCell {
+class AddOrRemoveDoubleInputCell: UITableViewCell, DequeueAbleCell {
 
     @IBOutlet private weak var minusButton: UIButton!
     @IBOutlet private weak var plusButton: UIButton!
@@ -23,18 +23,8 @@ class AddOrRemoveDoubleInputCell: UICollectionViewCell, DequeueAbleCell, Dynamic
                              nib: addOrRemoveDoubleInputHeaderNib)
     }
     
-    private var isHeightCalculated = false
-    
     func update(with field: FieldType) {
         
-    }
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        guard !isHeightCalculated else {
-            return layoutAttributes
-        }
-        
-        return calculateDynamicHeight(with: layoutAttributes)
     }
     
     @IBAction func plusButtonWasPressed(_ sender: Any) {

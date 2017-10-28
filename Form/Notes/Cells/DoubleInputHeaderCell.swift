@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DoubleInputHeaderCell: UICollectionViewCell, DequeueAbleCell, DynamicHeightCell {
+class DoubleInputHeaderCell: UITableViewCell, DequeueAbleCell {
 
     @IBOutlet weak var descriptionLabel: UILabel!
     
@@ -18,16 +18,6 @@ class DoubleInputHeaderCell: UICollectionViewCell, DequeueAbleCell, DynamicHeigh
         
         return FieldCellType(cellIdentifier: doubleInputHeaderCellIdentifier,
                              nib: doubleInputHeaderNib)
-    }
-    
-    private var isHeightCalculated = false
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        guard !isHeightCalculated else {
-            return layoutAttributes
-        }
-        
-        return calculateDynamicHeight(with: layoutAttributes)
     }
     
     func update(with field: FieldType) {

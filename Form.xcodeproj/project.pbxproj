@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E63AE0C01F9D488F002FE2CC /* NotesModuleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63AE0BF1F9D488F002FE2CC /* NotesModuleLoader.swift */; };
-		E63AE0C21F9D603D002FE2CC /* DynamicHeighCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63AE0C11F9D603D002FE2CC /* DynamicHeighCell.swift */; };
 		E63AE0C41F9D6A13002FE2CC /* FormPresenterInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63AE0C31F9D6A13002FE2CC /* FormPresenterInterface.swift */; };
 		E6D3364A1F9D103A00363C9C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D336491F9D103A00363C9C /* AppDelegate.swift */; };
 		E6D3364C1F9D103A00363C9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6D3364B1F9D103A00363C9C /* Assets.xcassets */; };
@@ -49,7 +48,6 @@
 
 /* Begin PBXFileReference section */
 		E63AE0BF1F9D488F002FE2CC /* NotesModuleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotesModuleLoader.swift; path = Notes/NotesModuleLoader.swift; sourceTree = "<group>"; };
-		E63AE0C11F9D603D002FE2CC /* DynamicHeighCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DynamicHeighCell.swift; path = Notes/Cells/DynamicHeighCell.swift; sourceTree = "<group>"; };
 		E63AE0C31F9D6A13002FE2CC /* FormPresenterInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FormPresenterInterface.swift; path = Notes/FormPresenterInterface.swift; sourceTree = "<group>"; };
 		E6D336461F9D103A00363C9C /* Form.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Form.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6D336491F9D103A00363C9C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 				E6D336961F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib */,
 				E6D336861F9D17E500363C9C /* SimpleActionCell.swift */,
 				E6D336871F9D17E500363C9C /* SimpleActionCell.xib */,
-				E63AE0C11F9D603D002FE2CC /* DynamicHeighCell.swift */,
 			);
 			name = Cells;
 			path = ..;
@@ -351,7 +348,6 @@
 				E6D336901F9D1F9500363C9C /* Collection+Bounds.swift in Sources */,
 				E6D336931F9D2BF200363C9C /* DoubleInputHeaderCell.swift in Sources */,
 				E6D3364A1F9D103A00363C9C /* AppDelegate.swift in Sources */,
-				E63AE0C21F9D603D002FE2CC /* DynamicHeighCell.swift in Sources */,
 				E63AE0C41F9D6A13002FE2CC /* FormPresenterInterface.swift in Sources */,
 				E6D336801F9D115600363C9C /* FormPresenter.swift in Sources */,
 				E63AE0C01F9D488F002FE2CC /* NotesModuleLoader.swift in Sources */,

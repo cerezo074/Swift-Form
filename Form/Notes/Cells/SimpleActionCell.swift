@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SimpleActionCell: UICollectionViewCell, DequeueAbleCell, DynamicHeightCell {
+class SimpleActionCell: UITableViewCell, DequeueAbleCell {
     
     @IBOutlet weak var actionButton: UIButton!
     
@@ -18,16 +18,6 @@ class SimpleActionCell: UICollectionViewCell, DequeueAbleCell, DynamicHeightCell
         
         return FieldCellType(cellIdentifier: simpleActionCellIdentifier,
                              nib: simpleActionNib)
-    }
-    
-    private var isHeightCalculated = false
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        guard !isHeightCalculated else {
-            return layoutAttributes
-        }
-        
-        return calculateDynamicHeight(with: layoutAttributes)
     }
     
     func update(with field: FieldType) {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E60842B91FA52EAD00B8D61C /* NotesInteractorInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60842B81FA52EAD00B8D61C /* NotesInteractorInterface.swift */; };
+		E60842BB1FA5311800B8D61C /* NotesInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60842BA1FA5311800B8D61C /* NotesInteractor.swift */; };
 		E63AE0C01F9D488F002FE2CC /* NotesModuleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63AE0BF1F9D488F002FE2CC /* NotesModuleLoader.swift */; };
 		E63AE0C41F9D6A13002FE2CC /* FormPresenterInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63AE0C31F9D6A13002FE2CC /* FormPresenterInterface.swift */; };
 		E6D3364A1F9D103A00363C9C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D336491F9D103A00363C9C /* AppDelegate.swift */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E60842B81FA52EAD00B8D61C /* NotesInteractorInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesInteractorInterface.swift; sourceTree = "<group>"; };
+		E60842BA1FA5311800B8D61C /* NotesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesInteractor.swift; sourceTree = "<group>"; };
 		E63AE0BF1F9D488F002FE2CC /* NotesModuleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotesModuleLoader.swift; path = Notes/NotesModuleLoader.swift; sourceTree = "<group>"; };
 		E63AE0C31F9D6A13002FE2CC /* FormPresenterInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FormPresenterInterface.swift; path = Notes/FormPresenterInterface.swift; sourceTree = "<group>"; };
 		E6D336461F9D103A00363C9C /* Form.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Form.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +104,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E60842B71FA52E8E00B8D61C /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				E60842B81FA52EAD00B8D61C /* NotesInteractorInterface.swift */,
+				E60842BA1FA5311800B8D61C /* NotesInteractor.swift */,
+			);
+			path = Interactor;
+			sourceTree = "<group>";
+		};
 		E63AE0C51F9D6A18002FE2CC /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +187,7 @@
 		E6D336781F9D10BC00363C9C /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				E60842B71FA52E8E00B8D61C /* Interactor */,
 				E63AE0C61F9D6A3A002FE2CC /* View */,
 				E63AE0C51F9D6A18002FE2CC /* Presenter */,
 				E63AE0BF1F9D488F002FE2CC /* NotesModuleLoader.swift */,
@@ -345,6 +359,7 @@
 			files = (
 				E6D3367E1F9D10EE00363C9C /* FormDataSource.swift in Sources */,
 				E6D336971F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift in Sources */,
+				E60842B91FA52EAD00B8D61C /* NotesInteractorInterface.swift in Sources */,
 				E6D336901F9D1F9500363C9C /* Collection+Bounds.swift in Sources */,
 				E6D336931F9D2BF200363C9C /* DoubleInputHeaderCell.swift in Sources */,
 				E6D3364A1F9D103A00363C9C /* AppDelegate.swift in Sources */,
@@ -352,6 +367,7 @@
 				E6D336801F9D115600363C9C /* FormPresenter.swift in Sources */,
 				E63AE0C01F9D488F002FE2CC /* NotesModuleLoader.swift in Sources */,
 				E6D336881F9D17E500363C9C /* SimpleActionCell.swift in Sources */,
+				E60842BB1FA5311800B8D61C /* NotesInteractor.swift in Sources */,
 				E6D3367C1F9D10CF00363C9C /* FormViewController.swift in Sources */,
 				E6D3368D1F9D17F900363C9C /* DoubleInputCell.swift in Sources */,
 			);

@@ -12,7 +12,8 @@ import UIKit
 struct NotesModuleLoader {
     
     var view: UIViewController {
-        let presenter = FormPresenter()
+        let interactor = NotesInteractor(calculatorService: nil)
+        let presenter = FormPresenter(interactor: interactor)
         let dataSource = FormDataSource(presenter: presenter)
         let view = FormViewController(presenter: presenter, dataSource: dataSource)
         

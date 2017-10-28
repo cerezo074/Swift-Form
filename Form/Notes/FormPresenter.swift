@@ -38,6 +38,12 @@ class FormPresenter: FormPresenterInterface {
         return "adoedmwed ewod wedwiopemdw edopqiwed qwoepdqwmed qwoedinqwe diqwed#"
     }
     
+    private let interactor: NotesInteractorInterface
+    
+    required init(interactor: NotesInteractorInterface) {
+        self.interactor = interactor
+    }
+    
     func fields(for section: UInt) -> [FieldType] {
         guard let formSections = FormSections(rawValue: Int(section)) else {
             return []
@@ -97,7 +103,22 @@ class FormPresenter: FormPresenterInterface {
     }
     
     func calculateNote() {
-        
+        let notes = doubleInputFields.flatMap { (field) -> Score? in
+            guard case let .doubleInput(noteText, percentageText, _) = field else {
+                return nil
+            }
+            
+            guard let note = Float(noteText), let percetage = Float(percentageText) else {
+                return nil
+            }
+            
+            return Score(note: note, percentage: percetage)
+        }
+    
+        //Add desired note field on view
+        //Fill double input fields
+        //Set the state if notes are not valid(calculate each indexpath) return invalid state if needed
+        //Calculate desirednote
     }
     
     func createRemoveOrAddAction(for indexPath: IndexPath) -> RemoveOrAddTypeAction {

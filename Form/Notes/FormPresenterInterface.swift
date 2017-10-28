@@ -80,4 +80,6 @@ protocol FormPresenterInterface: class {
     func addDoubleInput(at index: UInt?)
     func calculateNote()
     func createRemoveOrAddAction(for indexPath: IndexPath) -> RemoveOrAddTypeAction
+    
+    init(interactor: NotesInteractorInterface)
 }

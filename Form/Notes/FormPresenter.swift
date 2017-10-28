@@ -89,6 +89,11 @@ class FormPresenter: FormPresenterInterface {
         doubleInputFields.append(inputToInsert)
         let lastIndex = UInt(doubleInputFields.count - 1)
         formViewState = .addedInput(indexPath: createIndexPath(for: .input, item: lastIndex))
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.doubleInputFields[Int(lastIndex)] = FormPresenter.defaultInputWithError
+            self.formViewState = .showValidationError(indexPath: self.createIndexPath(for: .input, item: lastIndex))
+        }
     }
     
     func calculateNote() {
@@ -116,6 +121,10 @@ private extension FormPresenter {
     
     static var defaultInput: FieldType {
         return .doubleInput(firtsTitleInput: "Nota", secondTitleInput: "Porcentaje", validationError: "")
+    }
+    
+    static var defaultInputWithError: FieldType {
+        return .doubleInput(firtsTitleInput: "Nota", secondTitleInput: "Porcentaje", validationError: "You can use periods. Please correct domd doaismd domida sdoedniwda o##")
     }
     
     func createIndexPath(for section: FormSections, item: UInt) -> IndexPath {

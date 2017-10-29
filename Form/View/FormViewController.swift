@@ -77,8 +77,10 @@ private extension FormViewController {
                 self.removeCell(at: indexPaths)
             case .showResult(let indexPaths):
                 self.showResult(at: indexPaths)
-            case .showValidationError(let indexPaths):
-                self.showValidationError(at: indexPaths)
+            case .showValidationErrors(let indexPaths):
+                self.showValidationErrors(at: indexPaths)
+            case .showMessageToUser(let title, let message):
+                self.showMessageToUser(title: title, message: message)
             default:
                 return
             }
@@ -97,9 +99,19 @@ private extension FormViewController {
         formTableView.reloadRows(at: indexes, with: .automatic)
     }
     
-    func showValidationError(at indexes: [IndexPath]) {
+    func showValidationErrors(at indexes: [IndexPath]) {
         formTableView.reloadRows(at: indexes, with: .automatic)
     }
+    
+    func showMessageToUser(title: String, message: String) {
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
     
 }
 

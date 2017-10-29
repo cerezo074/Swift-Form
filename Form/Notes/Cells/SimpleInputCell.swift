@@ -11,6 +11,7 @@ import UIKit
 class SimpleInputCell: UITableViewCell, DequeueAbleCell {
 
     @IBOutlet weak var inputTitleLabel: UILabel!
+    @IBOutlet weak var invalidMessageLabel: UILabel!
     @IBOutlet weak var inputTextField: UITextField! {
         didSet {
             inputTextField.addTarget(self,
@@ -39,12 +40,13 @@ class SimpleInputCell: UITableViewCell, DequeueAbleCell {
     }
 
     func update(with field: FieldType) {
-        guard case let .simpleInput(title, input) = field else {
+        guard case let .simpleInput(title, input, validationError) = field else {
             return
         }
         
         inputTitleLabel.text = title
         inputTextField.text = input
+        invalidMessageLabel.text = validationError
     }
     
     @objc func textFieldDidChange(textField: UITextField) {

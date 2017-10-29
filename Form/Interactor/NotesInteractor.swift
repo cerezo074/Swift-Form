@@ -10,10 +10,21 @@ import Foundation
 
 class NotesInteractor: NotesInteractorInterface {
     
+    struct ValidationRanges {
+        static let noteLowLimitValue: Float = 0.1
+        static let noteUpLimitValue: Float = 5
+        static let percentageLowLimitValue: Float = 1
+        static let percentageUpLimitValue: Float = 100
+    }
+    
     private let calculatorService: NotesCalculatorProtocol
     
     init(calculatorService: NotesCalculatorProtocol?) {
         self.calculatorService = calculatorService ?? NoteCalculator()
+    }
+    
+    func desiredNoteIsValid(_ note: String) -> ScoreError? {
+        return validateNote(note)
     }
     
     func notesAreValid(_ rawScores: [RawScore]) -> [ScoreErrorResult] {
@@ -21,29 +32,13 @@ class NotesInteractor: NotesInteractorInterface {
         
         for (index, rawScore) in rawScores.enumerated() {
             var errorsAtIndex: [ScoreError] = []
-            let note = Float(rawScore.note)
-            let percentage = Float(rawScore.percentage)
             
-            if note == nil {
-                errorsAtIndex.append(.invalid(type: .note))
+            if let noteError = validateNote(rawScore.note) {
+                errorsAtIndex.append(noteError)
             }
             
-            if percentage == nil {
-                errorsAtIndex.append(.invalid(type: .percentage))
-            }
-            
-            guard let noteValue = note,
-                let percentageValue = percentage else {
-                continue
-            }
-            
-            if noteValue <= 0 {
-                errorsAtIndex.append(.negative)
-            }
-            
-            if percentageValue < 1,
-                percentageValue > 100 {
-                errorsAtIndex.append(.invalidRange(lowLimit: 1, upLimit: 100))
+            if let percentageError = validatePercentage(rawScore.percentage) {
+                errorsAtIndex.append(percentageError)
             }
             
             errors.append(ScoreErrorResult(errors: errorsAtIndex, index: UInt(index)))
@@ -80,6 +75,38 @@ class NotesInteractor: NotesInteractorInterface {
             
             return Score(note: note, percentage: percetage)
         }
+    }
+    
+    private func validateNote(_ note: String?) -> ScoreError? {
+        guard let note = note,
+            let noteValue = Float(note) else {
+            return.invalid(type: .note)
+        }
+        
+        guard noteValue >= ValidationRanges.noteLowLimitValue,
+            noteValue <= ValidationRanges.noteUpLimitValue else {
+                return .invalidRange(lowLimit: ValidationRanges.noteLowLimitValue,
+                                     upLimit: ValidationRanges.noteUpLimitValue,
+                                     type: .note)
+        }
+        
+        return nil
+    }
+    
+    private func validatePercentage(_ percentage: String?) -> ScoreError? {
+        guard let percentage = percentage,
+            let percentageValue = Float(percentage) else {
+                return.invalid(type: .percentage)
+        }
+        
+        guard percentageValue >= ValidationRanges.percentageLowLimitValue,
+            percentageValue <= ValidationRanges.percentageUpLimitValue else {
+                return .invalidRange(lowLimit: ValidationRanges.percentageLowLimitValue,
+                                     upLimit: ValidationRanges.percentageUpLimitValue,
+                                     type: .percentage)
+        }
+        
+        return nil
     }
     
 }

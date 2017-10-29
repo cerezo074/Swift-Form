@@ -46,7 +46,8 @@ extension FormDataSource: UITableViewDataSource {
         }
         
         shouldConfigureRemoveOrAddAction(on: cell, at: indexPath)
-        shouldConfigureDelegate(on: cell, at: indexPath)
+        shouldConfigureInputs(on: cell, at: indexPath)
+        shouldConfigureSimpleAction(on: cell, at: indexPath)
         
         return cell
     }
@@ -71,7 +72,7 @@ private extension FormDataSource {
         cell.action = presenter?.removeOrAddAction(for: index)
     }
     
-    func shouldConfigureDelegate(on cell: UITableViewCell, at index: IndexPath) {
+    func shouldConfigureInputs(on cell: UITableViewCell, at index: IndexPath) {
         if let cell = cell as? SimpleInputCell {
             cell.indexPath = index
             cell.action = presenter?.simpleInputAction(for: index)

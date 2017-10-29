@@ -18,22 +18,21 @@ enum InvalidNumber {
 
 enum ScoreError: LocalizedError {
     case invalid(type: InvalidNumber)
-    case negative
-    case invalidRange(lowLimit: Int, upLimit: Int)
+    case invalidRange(lowLimit: Float, upLimit: Float , type: InvalidNumber)
     
     var localizedDescription: String {
         switch self {
         case .invalid(let type):
             return type == .note ? "Nota invalida" : "Porcentaje invalido"
-        case .negative:
-            return "Numeros negativos no son permitidos"
-        case .invalidRange(let lowLimit, let upLimit):
-            return "Rango invalido, debe estar comprendido entre \(lowLimit) - \(upLimit)"
+        case .invalidRange(let lowLimit, let upLimit, let type):
+            let typeText = type == .note ? "en nota" : "en porcentaje"
+            return "Rango invalido \(typeText), debe estar comprendido entre \(lowLimit) - \(upLimit)"
         }
     }
 }
 
 protocol NotesInteractorInterface {
+    func desiredNoteIsValid(_ note: String) -> ScoreError?
     func notesAreValid(_ rawScores: [RawScore]) -> [ScoreErrorResult]
     func calculeNote(_ rawScores: [RawScore], desiredNote: Float) -> Float
     func remainingPercentage(with rawScores: [RawScore], desiredNote: Float) -> Float

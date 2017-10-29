@@ -22,7 +22,9 @@ enum FormSection: Int {
 
 enum FieldType {
     case simpleMessage(description: String)
-    case simpleInput(title: String, input: String)
+    case addOrRemoveInput(addTitle: String, removeTitle: String)
+    case simpleAction(title: String)
+    case simpleInput(title: String, input: String, validationError: String)
     case doubleInput(
         firtsTitleInput: String,
         firstInput: String,
@@ -30,8 +32,6 @@ enum FieldType {
         secondInput: String,
         validationError: String
     )
-    case addOrRemoveInput(addTitle: String, removeTitle: String)
-    case simpleAction(title: String)
 }
 
 extension FieldType {
@@ -40,7 +40,7 @@ extension FieldType {
         switch self {
         case .simpleMessage(_):
             return SimpleDescriptionCell.dequeueCell
-        case .simpleInput(_, _):
+        case .simpleInput(_, _, _):
             return SimpleInputCell.dequeueCell
         case .doubleInput(_, _, _, _, _):
             return DoubleInputCell.dequeueCell
@@ -51,12 +51,14 @@ extension FieldType {
         }
     }
     
-    func updateSimpleInput(_ input: String) -> FieldType? {
-        guard case let .simpleInput(title, _) = self else {
+    func updateSimpleInput(_ input: String? = nil, error: String? = nil) -> FieldType? {
+        guard case let .simpleInput(title, oldInput, oldError) = self else {
             return nil
         }
         
-        return .simpleInput(title: title, input: input)
+        return .simpleInput(title: title,
+                            input: input ?? oldInput,
+                            validationError: error ?? oldError)
     }
     
     func updateDoubleInput(firstInput: String? = nil, secondInput: String? = nil, errorDescription: String? = nil) -> FieldType? {
@@ -133,8 +135,9 @@ enum FormViewState {
     case idle
     case addedInput(indexPaths: [IndexPath])
     case deletedInput(indexPaths: [IndexPath])
-    case showValidationError(indexPaths: [IndexPath])
+    case showValidationErrors(indexPaths: [IndexPath])
     case showResult(indexPaths: [IndexPath])
+    case showMessageToUser(title: String, message: String)
 }
 
 typealias RemoveOrAddTypeAction = (RemoveOrAddType) -> Void
@@ -142,6 +145,11 @@ typealias FormViewStateAction = (FormViewState) -> Void
 typealias SimpleAction = () -> Void
 typealias SimpleInputAction = (_ input: String, _ index: IndexPath) -> Void
 typealias DoubleInputAction = (_ firstInput: String, _ secondInput: String, _ index: IndexPath) -> Void
+
+enum ValidationErrorType: String {
+    case simpleInput
+    case doubleInput
+}
 
 protocol FormPresenterInterface: class {
     var sections: UInt { get }

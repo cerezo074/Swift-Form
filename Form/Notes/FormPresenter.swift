@@ -138,8 +138,15 @@ class FormPresenter: FormPresenterInterface {
             return
         }
         
-        //Set the state if notes are not valid(calculate each indexpath) return invalid state if needed
-        //Calculate desirednote
+        guard let desiredNote = desiredNote,
+            let desiredNoteValue = Float(desiredNote) else {
+            return
+        }
+        
+        let noteCalculated = interactor.calculeNote(rawNotes,
+                                                    desiredNote: desiredNoteValue)
+        
+        //TODO: Clean errors(with view state) if they exists and show results(note calculated, remaining percentage and percentage acumulated)
     }
     
     func cleanNotes() {
@@ -154,7 +161,7 @@ class FormPresenter: FormPresenterInterface {
         }
         
         doubleInputFields = doubleInputsFieldWithoutValues
-        
+        //TODO: clean all(simple and double inputs) on view
     }
     
     func removeOrAddAction(for index: IndexPath) -> RemoveOrAddTypeAction {

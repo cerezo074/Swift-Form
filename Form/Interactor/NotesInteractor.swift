@@ -41,6 +41,10 @@ class NotesInteractor: NotesInteractorInterface {
                 errorsAtIndex.append(percentageError)
             }
             
+            guard !errorsAtIndex.isEmpty else {
+                continue
+            }
+            
             errors.append(ScoreErrorResult(errors: errorsAtIndex, index: UInt(index)))
         }
         

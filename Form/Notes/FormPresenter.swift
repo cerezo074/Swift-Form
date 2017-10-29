@@ -131,8 +131,7 @@ class FormPresenter: FormPresenterInterface {
     }
     
     func calculateNote() {
-        
-        //Fill double input fields
+        cleanErrors()
         //Set the state if notes are not valid(calculate each indexpath) return invalid state if needed
         //Calculate desirednote
     }

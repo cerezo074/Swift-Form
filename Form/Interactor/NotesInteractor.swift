@@ -16,15 +16,15 @@ class NotesInteractor: NotesInteractorInterface {
         self.calculatorService = calculatorService ?? NoteCalculator()
     }
     
-    func notesAreValid(_ notes: [Score]) -> Bool {
+    func notesAreValid(_ notes: [Score]) -> ScoreError? {
         for note in notes {
             guard note.note > 0 else {
-                return false
+                return ScoreError.negative
             }
             
             guard note.percentage > 0,
             note.percentage < 100 else {
-                return false
+                return ScoreError.invalidRange(lowLimit: 1, upLimit: 100)
             }
         }
         

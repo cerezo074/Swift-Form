@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol SimpleInputCellDelegate: class {
-    func inputWasUpdated(on cell: SimpleInputCell, new value: String)
-}
-
 class SimpleInputCell: UITableViewCell, DequeueAbleCell {
 
     @IBOutlet weak var inputTitleLabel: UILabel!
@@ -31,13 +27,14 @@ class SimpleInputCell: UITableViewCell, DequeueAbleCell {
                              nib: simpleActionNib)
     }
     
-    
-    weak var delegate: SimpleInputCellDelegate?
+    var action: SimpleInputAction?
+    var indexPath: IndexPath?
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        delegate = nil
+        action = nil
+        indexPath = nil
         inputTextField.text = ""
     }
 
@@ -51,8 +48,12 @@ class SimpleInputCell: UITableViewCell, DequeueAbleCell {
     }
     
     @objc func textFieldDidChange(textField: UITextField) {
+        guard let index = indexPath else {
+            return
+        }
+        
         let text = textField.text ?? ""
-        delegate?.inputWasUpdated(on: self, new: text)
+        action?(text, index)
     }
     
 }

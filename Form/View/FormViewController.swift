@@ -27,9 +27,6 @@ class FormViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Calculadora"
-        dataSource.simpleInputCellDelegate = self
-        dataSource.doubleInputCellDelegate = self
-        
         configureFormCollectionView()
         bindFormViewState()
         configureCleanAction()
@@ -74,34 +71,34 @@ private extension FormViewController {
             }
             
             switch state {
-            case .addedInput(let indexPath):
-                self.addCell(at: indexPath)
-            case .deletedInput(let indexPath):
-                self.removeCell(at: indexPath)
-            case .showResult(let indexPath):
-                self.showResult(at: indexPath)
-            case .showValidationError(let indexPath):
-                self.showValidationError(at: indexPath)
+            case .addedInput(let indexPaths):
+                self.addCell(at: indexPaths)
+            case .deletedInput(let indexPaths):
+                self.removeCell(at: indexPaths)
+            case .showResult(let indexPaths):
+                self.showResult(at: indexPaths)
+            case .showValidationError(let indexPaths):
+                self.showValidationError(at: indexPaths)
             default:
                 return
             }
         }
     }
     
-    func addCell(at index: IndexPath) {
-        formTableView.insertRows(at: [index], with: .automatic)
+    func addCell(at indexes: [IndexPath]) {
+        formTableView.insertRows(at: indexes, with: .automatic)
     }
     
-    func removeCell(at index: IndexPath) {
-        formTableView.deleteRows(at: [index], with: .automatic)
+    func removeCell(at indexes: [IndexPath]) {
+        formTableView.deleteRows(at: indexes, with: .automatic)
     }
     
-    func showResult(at index: IndexPath) {
-        formTableView.reloadRows(at: [index], with: .automatic)
+    func showResult(at indexes: [IndexPath]) {
+        formTableView.reloadRows(at: indexes, with: .automatic)
     }
     
-    func showValidationError(at index: IndexPath) {
-        formTableView.reloadRows(at: [index], with: .automatic)
+    func showValidationError(at indexes: [IndexPath]) {
+        formTableView.reloadRows(at: indexes, with: .automatic)
     }
     
 }
@@ -110,32 +107,6 @@ extension FormViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-}
-
-extension FormViewController: SimpleInputCellDelegate {
-    
-    func inputWasUpdated(on cell: SimpleInputCell, new value: String) {
-        guard let cellIndex = formTableView.indexPath(for: cell) else {
-            return
-        }
-        
-        presenter.setSimpleInput(value, at: cellIndex)
-    }
-    
-}
-
-extension FormViewController: DoubleInputCellDelegate {
-    
-    func inputsWereUpdated(on cell: DoubleInputCell, firstInput: String, secondInput: String) {
-        guard let cellIndex = formTableView.indexPath(for: cell) else {
-            return
-        }
-        
-        presenter.setDoubleInput(firstInput: firstInput,
-                                 secondInput: secondInput,
-                                 at: cellIndex)
     }
     
 }

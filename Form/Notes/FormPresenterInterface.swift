@@ -8,6 +8,18 @@
 
 import Foundation
 
+enum FormSection: Int {
+    case information
+    case doubleInput
+    case addOrRemove
+    case simpleInput
+    case action
+    
+    static var sections: UInt {
+        return 5
+    }
+}
+
 enum FieldType {
     case simpleMessage(description: String)
     case simpleInput(title: String, input: String)
@@ -20,6 +32,9 @@ enum FieldType {
     )
     case addOrRemoveInput(addTitle: String, removeTitle: String)
     case simpleAction(title: String)
+}
+
+extension FieldType {
     
     var cellType: FieldCellType {
         switch self {
@@ -35,6 +50,39 @@ enum FieldType {
             return SimpleActionCell.dequeueCell
         }
     }
+    
+    func updateSimpleInput(_ input: String) -> FieldType? {
+        guard case let .simpleInput(title, _) = self else {
+            return nil
+        }
+        
+        return .simpleInput(title: title, input: input)
+    }
+    
+    func updateDoubleInput(firstInput: String? = nil, secondInput: String? = nil, errorDescription: String? = nil) -> FieldType? {
+        guard case let .doubleInput(firstTitle, oldFirstInput, secondTitle, oldSecondInput, oldError) = self else {
+            return nil
+        }
+        
+        return .doubleInput(firtsTitleInput: firstTitle,
+                            firstInput: firstInput ?? oldFirstInput,
+                            secondTitleInput: secondTitle,
+                            secondInput: secondInput ?? oldSecondInput,
+                            validationError: errorDescription ?? oldError)
+    }
+    
+    func cleanDoubleInputError() -> FieldType? {
+        guard case let .doubleInput(firstTitle, firstInput, secondTitle, secondInput, _) = self else {
+            return nil
+        }
+        
+        return .doubleInput(firtsTitleInput: firstTitle,
+                            firstInput: firstInput,
+                            secondTitleInput: secondTitle,
+                            secondInput: secondInput,
+                            validationError: "")
+    }
+    
 }
 
 extension FieldType: Equatable {
@@ -83,14 +131,17 @@ enum RemoveOrAddType {
 
 enum FormViewState {
     case idle
-    case addedInput(indexPath: IndexPath)
-    case deletedInput(indexPath: IndexPath)
-    case showValidationError(indexPath: IndexPath)
-    case showResult(indexPath: IndexPath)
+    case addedInput(indexPaths: [IndexPath])
+    case deletedInput(indexPaths: [IndexPath])
+    case showValidationError(indexPaths: [IndexPath])
+    case showResult(indexPaths: [IndexPath])
 }
 
 typealias RemoveOrAddTypeAction = (RemoveOrAddType) -> Void
 typealias FormViewStateAction = (FormViewState) -> Void
+typealias SimpleAction = () -> Void
+typealias SimpleInputAction = (_ input: String, _ index: IndexPath) -> Void
+typealias DoubleInputAction = (_ firstInput: String, _ secondInput: String, _ index: IndexPath) -> Void
 
 protocol FormPresenterInterface: class {
     var sections: UInt { get }
@@ -104,7 +155,11 @@ protocol FormPresenterInterface: class {
     func addDoubleInput(at index: UInt?)
     func calculateNote()
     func cleanNotes()
-    func createRemoveOrAddAction(for indexPath: IndexPath) -> RemoveOrAddTypeAction
+    
+    func removeOrAddAction(for index: IndexPath) -> RemoveOrAddTypeAction
+    func simpleAction(for index: IndexPath) -> SimpleAction
+    func simpleInputAction(for index: IndexPath) -> SimpleInputAction
+    func doubleInputAction(for index: IndexPath) -> DoubleInputAction
     
     init(interactor: NotesInteractorInterface)
 }

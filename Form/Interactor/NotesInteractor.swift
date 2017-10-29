@@ -16,28 +16,70 @@ class NotesInteractor: NotesInteractorInterface {
         self.calculatorService = calculatorService ?? NoteCalculator()
     }
     
-    func notesAreValid(_ notes: [Score]) -> ScoreError? {
-        for note in notes {
-            guard note.note > 0 else {
-                return ScoreError.negative
+    func notesAreValid(_ rawScores: [RawScore]) -> [ScoreErrorResult] {
+        var errors: [ScoreErrorResult] = []
+        
+        for (index, rawScore) in rawScores.enumerated() {
+            var errorsAtIndex: [ScoreError] = []
+            let note = Float(rawScore.note)
+            let percentage = Float(rawScore.percentage)
+            
+            if note == nil {
+                errorsAtIndex.append(.invalid(type: .note))
             }
             
-            guard note.percentage > 0,
-            note.percentage < 100 else {
-                return ScoreError.invalidRange(lowLimit: 1, upLimit: 100)
+            if percentage == nil {
+                errorsAtIndex.append(.invalid(type: .percentage))
             }
+            
+            guard let noteValue = note,
+                let percentageValue = percentage else {
+                continue
+            }
+            
+            if noteValue <= 0 {
+                errorsAtIndex.append(.negative)
+            }
+            
+            if percentageValue < 1,
+                percentageValue > 100 {
+                errorsAtIndex.append(.invalidRange(lowLimit: 1, upLimit: 100))
+            }
+            
+            errors.append(ScoreErrorResult(errors: errorsAtIndex, index: UInt(index)))
         }
         
-        return true
+        return errors
     }
     
-    func calculeNote(_ notes: [Score], desiredNote: Float) -> Float {
-        return calculatorService.caculateNotes(with: notes, desiredNote: desiredNote)
+    func calculeNote(_ rawScores: [RawScore], desiredNote: Float) -> Float {
+        let scores = getScores(from: rawScores)
+        
+        guard !scores.isEmpty else {
+            return 0.0
+        }
+        
+        return calculatorService.caculateNotes(with: scores, desiredNote: desiredNote)
     }
     
-    func remainingPercentage(with notes: [Score], desiredNote: Float) -> Float {
-        return calculatorService.getRemainingPercentage(with: notes, desiredNote: desiredNote)
+    func remainingPercentage(with rawScores: [RawScore], desiredNote: Float) -> Float {
+        let scores = getScores(from: rawScores)
+        
+        guard !scores.isEmpty else {
+            return 0.0
+        }
+        
+        return calculatorService.getRemainingPercentage(with: scores, desiredNote: desiredNote)
     }
-
+    
+    private func getScores(from rawScores: [RawScore]) -> [Score] {
+        return rawScores.flatMap { (rawScore) -> Score? in
+            guard let note = Float(rawScore.note), let percetage = Float(rawScore.percentage) else {
+                return nil
+            }
+            
+            return Score(note: note, percentage: percetage)
+        }
+    }
     
 }

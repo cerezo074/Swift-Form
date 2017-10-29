@@ -17,10 +17,7 @@ protocol DequeueAbleCell {
 }
 
 class FormDataSource: NSObject {
-
     weak var presenter: FormPresenterInterface?
-    weak var simpleInputCellDelegate: SimpleInputCellDelegate?
-    weak var doubleInputCellDelegate: DoubleInputCellDelegate?
     
     init(presenter: FormPresenterInterface) {
         self.presenter = presenter
@@ -49,7 +46,7 @@ extension FormDataSource: UITableViewDataSource {
         }
         
         shouldConfigureRemoveOrAddAction(on: cell, at: indexPath)
-        shouldConfigureDelegate(on: cell)
+        shouldConfigureDelegate(on: cell, at: indexPath)
         
         return cell
     }
@@ -71,17 +68,28 @@ private extension FormDataSource {
             return
         }
         
-        cell.action = presenter?.createRemoveOrAddAction(for: index)
+        cell.action = presenter?.removeOrAddAction(for: index)
     }
     
-    func shouldConfigureDelegate(on cell: UITableViewCell) {
+    func shouldConfigureDelegate(on cell: UITableViewCell, at index: IndexPath) {
         if let cell = cell as? SimpleInputCell {
-            cell.delegate = simpleInputCellDelegate
+            cell.indexPath = index
+            cell.action = presenter?.simpleInputAction(for: index)
         }
         
         if let cell = cell as? DoubleInputCell {
-            cell.delegate = doubleInputCellDelegate
+            cell.indexPath = index
+            cell.action = presenter?.doubleInputAction(for: index)
         }
+    }
+    
+    func shouldConfigureSimpleAction(on cell: UITableViewCell, at index: IndexPath) {
+        guard let cell = cell as? SimpleActionCell else {
+            return
+        }
+        
+        cell.indexPath = index
+        cell.action = presenter?.simpleAction(for: index)
     }
     
 }

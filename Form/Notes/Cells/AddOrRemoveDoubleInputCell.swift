@@ -23,6 +23,11 @@ class AddOrRemoveDoubleInputCell: UITableViewCell, DequeueAbleCell {
                              nib: addOrRemoveDoubleInputHeaderNib)
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        action = nil
+    }
+    
     func update(with field: FieldType) {
         
     }

@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol DoubleInputCellDelegate: class {
-    func inputsWereUpdated(on cell: DoubleInputCell, firstInput: String, secondInput: String)
-}
-
 class DoubleInputCell: UITableViewCell, DequeueAbleCell {
     
     @IBOutlet weak var firstInputTitleLabel: UILabel!
@@ -25,6 +21,7 @@ class DoubleInputCell: UITableViewCell, DequeueAbleCell {
                                      for: .editingChanged)
         }
     }
+    
     @IBOutlet weak var secondInputTextField: UITextField! {
         didSet {
             secondInputTextField.addTarget(self,
@@ -41,11 +38,14 @@ class DoubleInputCell: UITableViewCell, DequeueAbleCell {
                              nib: doubleInputNib)
     }
     
-    weak var delegate: DoubleInputCellDelegate?
+    var action: DoubleInputAction?
+    var indexPath: IndexPath?
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        delegate = nil
+        
+        action = nil
+        indexPath = nil
         firstInputTextField.text = ""
         secondInputTextField.text = ""
     }
@@ -68,21 +68,11 @@ class DoubleInputCell: UITableViewCell, DequeueAbleCell {
     
     
     @objc func textFieldDidChange(textField: UITextField) {
-        delegate?.inputsWereUpdated(on: self,
-                                    firstInput: firstInputTextField.text ?? "",
-                                    secondInput: secondInputTextField.text ?? "")
-    }
-
-}
-
-extension DoubleInputCell: UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        delegate?.inputsWereUpdated(on: self,
-                                    firstInput: firstInputTextField.text ?? "",
-                                    secondInput: secondInputTextField.text ?? "")
+        guard let index = indexPath else {
+            return
+        }
         
-        return true
+        action?(firstInputTextField.text ?? "" , secondInputTextField.text ?? "", index)
     }
-    
+
 }

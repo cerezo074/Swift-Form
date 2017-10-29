@@ -107,25 +107,55 @@ class FormPresenter: FormPresenterInterface {
     }
     
     func setSimpleInput(_ newValue: String, at index: IndexPath) {
+        guard let section = FormSections(rawValue: index.section),
+            section == .simpleInput else {
+            print("Invalid section to be updated \(index.section), it should be of simpleInput type")
+            return
+        }
         
+        guard case let .simpleInput(title, _) = simpleInput else {
+            return
+        }
+        
+        simpleInput = .simpleInput(title: title, input: newValue)
     }
     
-    func setDoubleInput(_ newValue: String, at index: IndexPath) {
+    func setDoubleInput(firstInput: String, secondInput: String, at index: IndexPath) {
+        guard let newDoubleInput = createDoubleInput(firtsInput: firstInput,
+                                                  secondInput: secondInput,
+                                                  at: index) else {
+            return
+        }
         
+        doubleInputFields[index.row] = newDoubleInput
     }
     
     func calculateNote() {
         
-        //Add desired note field on view
         //Fill double input fields
         //Set the state if notes are not valid(calculate each indexpath) return invalid state if needed
         //Calculate desirednote
     }
     
     func cleanNotes() {
-//        doubleInputFields.forEach {
-//            guard .doubleInput(, _, _)
-//        }
+        let doubleInputsFieldWithoutValues = doubleInputFields.flatMap { field -> FieldType? in
+            guard case let .doubleInput(firstTitle, _, secondTitle, _, _) = field else {
+                return nil
+            }
+            
+            return .doubleInput(firtsTitleInput: firstTitle,
+                                firstInput: "",
+                                secondTitleInput: secondTitle,
+                                secondInput: "",
+                                validationError: "")
+        }
+        
+        guard !doubleInputsFieldWithoutValues.isEmpty else {
+            print("Error can't remove erorrs on double inputs")
+            return
+        }
+        
+        doubleInputFields = doubleInputsFieldWithoutValues
     }
     
     func createRemoveOrAddAction(for indexPath: IndexPath) -> RemoveOrAddTypeAction {
@@ -169,16 +199,48 @@ private extension FormPresenter {
                             validationError: "")
     }
     
-    static var defaultInputWithError: FieldType {
+    func createDoubleInput(firtsInput: String, secondInput: String, at index: IndexPath) -> FieldType? {
+        guard let section = FormSections(rawValue: index.section),
+            section == .doubleInput else {
+                print("Invalid section to be updated \(index.section), it should be of doubleInput type")
+                return nil
+        }
+        
+        guard doubleInputFields[safe: index.row] != nil else {
+            print("Invalid row to be updated on double input section \(index.row)")
+            return nil
+        }
+        
         return .doubleInput(firtsTitleInput: "Nota",
-                            firstInput: "nota",
+                            firstInput: firtsInput,
                             secondTitleInput: "Porcentaje",
-                            secondInput: "porcentaje",
-                            validationError: "You can use periods. Please correct domd doaismd domida sdoedniwda o##")
+                            secondInput: secondInput,
+                            validationError: "")
     }
     
     func createIndexPath(for section: FormSections, item: UInt) -> IndexPath {
         return IndexPath(item: Int(item), section: section.rawValue)
+    }
+    
+    func cleanErrors() {
+        let doubleInputsFieldWithoutError = doubleInputFields.flatMap { field -> FieldType? in
+            guard case let .doubleInput(firstTitle, firstInput, secondTitle, secondInput, _) = field else {
+                return nil
+            }
+            
+            return .doubleInput(firtsTitleInput: firstTitle,
+                                firstInput: firstInput,
+                                secondTitleInput: secondTitle,
+                                secondInput: secondInput,
+                                validationError: "")
+        }
+        
+        guard !doubleInputsFieldWithoutError.isEmpty else {
+            print("Error can't remove erorrs on double inputs")
+            return
+        }
+        
+        doubleInputFields = doubleInputsFieldWithoutError
     }
     
 }

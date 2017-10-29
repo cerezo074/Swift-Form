@@ -45,11 +45,11 @@ extension FieldType: Equatable {
             return leftDescription == rightDescription
             
         case (.doubleInput(
-            let leftFirtsTitleInput,
-            let leftFirstInput,
-            let leftSecondTitleInput,
-            let leftSecondInput,
-            let leftValidationError),
+                let leftFirtsTitleInput,
+                let leftFirstInput,
+                let leftSecondTitleInput,
+                let leftSecondInput,
+                let leftValidationError),
               .doubleInput(
                 let rightFirtsTitleInput,
                 let rightFirstInput,
@@ -98,7 +98,7 @@ protocol FormPresenterInterface: class {
     var formViewStateAction: FormViewStateAction? { get set }
     
     func setSimpleInput(_ newValue: String, at index: IndexPath)
-    func setDoubleInput(_ newValue: String, at index: IndexPath)
+    func setDoubleInput(firstInput: String, secondInput: String, at index: IndexPath)
     func fields(for section: UInt) -> [FieldType]
     func removeDoubleInput(at index: UInt?)
     func addDoubleInput(at index: UInt?)

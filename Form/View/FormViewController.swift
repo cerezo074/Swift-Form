@@ -27,6 +27,9 @@ class FormViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Calculadora"
+        dataSource.simpleInputCellDelegate = self
+        dataSource.doubleInputCellDelegate = self
+        
         configureFormCollectionView()
         bindFormViewState()
         configureCleanAction()
@@ -107,6 +110,32 @@ extension FormViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+}
+
+extension FormViewController: SimpleInputCellDelegate {
+    
+    func inputWasUpdated(on cell: SimpleInputCell, new value: String) {
+        guard let cellIndex = formTableView.indexPath(for: cell) else {
+            return
+        }
+        
+        presenter.setSimpleInput(value, at: cellIndex)
+    }
+    
+}
+
+extension FormViewController: DoubleInputCellDelegate {
+    
+    func inputsWereUpdated(on cell: DoubleInputCell, firstInput: String, secondInput: String) {
+        guard let cellIndex = formTableView.indexPath(for: cell) else {
+            return
+        }
+        
+        presenter.setDoubleInput(firstInput: firstInput,
+                                 secondInput: secondInput,
+                                 at: cellIndex)
     }
     
 }

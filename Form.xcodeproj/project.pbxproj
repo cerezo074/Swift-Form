@@ -215,14 +215,14 @@
 			children = (
 				E6D336911F9D2BF200363C9C /* SimpleDescriptionCell.swift */,
 				E6D336921F9D2BF200363C9C /* SimpleDescriptionCell.xib */,
-				E6D3368B1F9D17F900363C9C /* DoubleInputCell.swift */,
-				E6D3368A1F9D17F800363C9C /* DoubleInputCell.xib */,
-				E6D336951F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift */,
-				E6D336961F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib */,
 				E6D336861F9D17E500363C9C /* SimpleActionCell.swift */,
 				E6D336871F9D17E500363C9C /* SimpleActionCell.xib */,
 				E61821671FA59DBA006551FF /* SimpleInputCell.swift */,
 				E61821681FA59DBA006551FF /* SimpleInputCell.xib */,
+				E6D3368B1F9D17F900363C9C /* DoubleInputCell.swift */,
+				E6D3368A1F9D17F800363C9C /* DoubleInputCell.xib */,
+				E6D336951F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift */,
+				E6D336961F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib */,
 			);
 			name = Cells;
 			path = ..;

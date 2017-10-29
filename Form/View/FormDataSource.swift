@@ -19,6 +19,8 @@ protocol DequeueAbleCell {
 class FormDataSource: NSObject {
 
     weak var presenter: FormPresenterInterface?
+    weak var simpleInputCellDelegate: SimpleInputCellDelegate?
+    weak var doubleInputCellDelegate: DoubleInputCellDelegate?
     
     init(presenter: FormPresenterInterface) {
         self.presenter = presenter
@@ -38,12 +40,16 @@ extension FormDataSource: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let field = fields(at: indexPath.section)[safe: indexPath.item],
-            let cell = tableView.dequeueReusableCell(withIdentifier: field.cellType.cellIdentifier) as? UITableViewCell & DequeueAbleCell else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: field.cellType.cellIdentifier) else {
                 return UITableViewCell()
         }
         
-        cell.update(with: field)
-        shouldBindRemoveOrAddAction(with: field, on: cell, at: indexPath)
+        if let cell = cell as? DequeueAbleCell {
+            cell.update(with: field)
+        }
+        
+        shouldConfigureRemoveOrAddAction(on: cell, at: indexPath)
+        shouldConfigureDelegate(on: cell)
         
         return cell
     }
@@ -60,12 +66,22 @@ private extension FormDataSource {
         return presenter.fields(for: UInt(section))
     }
     
-    func shouldBindRemoveOrAddAction(with field: FieldType, on cell: UITableViewCell, at index: IndexPath) {
+    func shouldConfigureRemoveOrAddAction(on cell: UITableViewCell, at index: IndexPath) {
         guard let cell = cell as? AddOrRemoveDoubleInputCell else {
             return
         }
         
         cell.action = presenter?.createRemoveOrAddAction(for: index)
+    }
+    
+    func shouldConfigureDelegate(on cell: UITableViewCell) {
+        if let cell = cell as? SimpleInputCell {
+            cell.delegate = simpleInputCellDelegate
+        }
+        
+        if let cell = cell as? DoubleInputCell {
+            cell.delegate = doubleInputCellDelegate
+        }
     }
     
 }

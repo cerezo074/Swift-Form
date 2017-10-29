@@ -11,11 +11,13 @@ import UIKit
 
 fileprivate enum FormSections: Int {
     case information
-    case input
+    case doubleInput
+    case addOrRemove
+    case simpleInput
     case action
     
     static var sections: UInt {
-        return 3
+        return 5
     }
 }
 
@@ -23,6 +25,10 @@ class FormPresenter: FormPresenterInterface {
     
     var sections: UInt {
         return FormSections.sections
+    }
+    
+    var cleanText: String {
+        return "Limpiar"
     }
     
     var formViewStateAction: FormViewStateAction?
@@ -33,6 +39,8 @@ class FormPresenter: FormPresenterInterface {
         }
     }
     
+    private var simpleInput: FieldType = .simpleInput(title: "Nota Deseada",
+                                                      input: "")
     private var doubleInputFields: [FieldType] = [FormPresenter.defaultInput]
     private var doubleInputIntructionsMessage: String {
         return "adoedmwed ewod wedwiopemdw edopqiwed qwoepdqwmed qwoedinqwe diqwed#"
@@ -54,13 +62,14 @@ class FormPresenter: FormPresenterInterface {
             return [
                 .simpleMessage(description: doubleInputIntructionsMessage)
             ]
-        case .input:
+        case .doubleInput:
             return doubleInputFields
+        case .addOrRemove:
+            return [.addOrRemoveInput(addTitle: "", removeTitle: "")]
+        case .simpleInput:
+            return [simpleInput]
         case .action:
-            return [
-                .addOrRemoveInput(addTitle: "", removeTitle: ""),
-                .simpleAction(title: "Calcula tu Nota")
-            ]
+            return [.simpleAction(title: "Calcula tu Nota")]
         }
     }
     
@@ -73,13 +82,13 @@ class FormPresenter: FormPresenterInterface {
         if let index = index,
             index < doubleInputFields.count - 1 {
             doubleInputFields.remove(at: Int(index))
-            formViewState = .deletedInput(indexPath: createIndexPath(for: .input, item: index))
+            formViewState = .deletedInput(indexPath: createIndexPath(for: .doubleInput, item: index))
             return
         }
         
         let lastIndex = UInt(doubleInputFields.count - 1)
         doubleInputFields.removeLast()
-        formViewState = .deletedInput(indexPath: createIndexPath(for: .input, item: lastIndex))
+        formViewState = .deletedInput(indexPath: createIndexPath(for: .doubleInput, item: lastIndex))
     }
     
     func addDoubleInput(at index: UInt?) {
@@ -88,37 +97,35 @@ class FormPresenter: FormPresenterInterface {
         if let index = index,
            index < doubleInputFields.count - 1 {
             doubleInputFields.insert(inputToInsert, at: Int(index))
-            formViewState = .addedInput(indexPath: createIndexPath(for: .input, item: index))
+            formViewState = .addedInput(indexPath: createIndexPath(for: .doubleInput, item: index))
             return
         }
         
         doubleInputFields.append(inputToInsert)
         let lastIndex = UInt(doubleInputFields.count - 1)
-        formViewState = .addedInput(indexPath: createIndexPath(for: .input, item: lastIndex))
+        formViewState = .addedInput(indexPath: createIndexPath(for: .doubleInput, item: lastIndex))
+    }
+    
+    func setSimpleInput(_ newValue: String, at index: IndexPath) {
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.doubleInputFields[Int(lastIndex)] = FormPresenter.defaultInputWithError
-            self.formViewState = .showValidationError(indexPath: self.createIndexPath(for: .input, item: lastIndex))
-        }
+    }
+    
+    func setDoubleInput(_ newValue: String, at index: IndexPath) {
+        
     }
     
     func calculateNote() {
-        let notes = doubleInputFields.flatMap { (field) -> Score? in
-            guard case let .doubleInput(noteText, percentageText, _) = field else {
-                return nil
-            }
-            
-            guard let note = Float(noteText), let percetage = Float(percentageText) else {
-                return nil
-            }
-            
-            return Score(note: note, percentage: percetage)
-        }
-    
+        
         //Add desired note field on view
         //Fill double input fields
         //Set the state if notes are not valid(calculate each indexpath) return invalid state if needed
         //Calculate desirednote
+    }
+    
+    func cleanNotes() {
+//        doubleInputFields.forEach {
+//            guard .doubleInput(, _, _)
+//        }
     }
     
     func createRemoveOrAddAction(for indexPath: IndexPath) -> RemoveOrAddTypeAction {
@@ -140,12 +147,34 @@ class FormPresenter: FormPresenterInterface {
 
 private extension FormPresenter {
     
+    var notes: [Score] {
+        return doubleInputFields.flatMap { (field) -> Score? in
+            guard case let .doubleInput(_ ,noteText, _, percentageText, _) = field else {
+                return nil
+            }
+            
+            guard let note = Float(noteText), let percetage = Float(percentageText) else {
+                return nil
+            }
+            
+            return Score(note: note, percentage: percetage)
+        }
+    }
+    
     static var defaultInput: FieldType {
-        return .doubleInput(firtsTitleInput: "Nota", secondTitleInput: "Porcentaje", validationError: "")
+        return .doubleInput(firtsTitleInput: "Nota",
+                            firstInput: "",
+                            secondTitleInput: "Porcentaje",
+                            secondInput: "",
+                            validationError: "")
     }
     
     static var defaultInputWithError: FieldType {
-        return .doubleInput(firtsTitleInput: "Nota", secondTitleInput: "Porcentaje", validationError: "You can use periods. Please correct domd doaismd domida sdoedniwda o##")
+        return .doubleInput(firtsTitleInput: "Nota",
+                            firstInput: "nota",
+                            secondTitleInput: "Porcentaje",
+                            secondInput: "porcentaje",
+                            validationError: "You can use periods. Please correct domd doaismd domida sdoedniwda o##")
     }
     
     func createIndexPath(for section: FormSections, item: UInt) -> IndexPath {

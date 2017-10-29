@@ -1,5 +1,5 @@
 //
-//  DoubleInputHeaderCell.swift
+//  SimpleDescriptionCell.swift
 //  Form
 //
 //  Created by Eli Pacheco Hoyos on 10/22/17.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class DoubleInputHeaderCell: UITableViewCell, DequeueAbleCell {
+class SimpleDescriptionCell: UITableViewCell, DequeueAbleCell {
 
     @IBOutlet weak var descriptionLabel: UILabel!
     
     static var dequeueCell: FieldCellType {
-        let doubleInputHeaderCellIdentifier = String(describing: DoubleInputHeaderCell.self)
-        let doubleInputHeaderNib = UINib(nibName: String(describing: DoubleInputHeaderCell.self), bundle: nil)
+        let doubleInputHeaderCellIdentifier = String(describing: SimpleDescriptionCell.self)
+        let doubleInputHeaderNib = UINib(nibName: String(describing: SimpleDescriptionCell.self), bundle: nil)
         
         return FieldCellType(cellIdentifier: doubleInputHeaderCellIdentifier,
                              nib: doubleInputHeaderNib)

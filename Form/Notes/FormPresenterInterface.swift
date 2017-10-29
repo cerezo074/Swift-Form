@@ -10,15 +10,24 @@ import Foundation
 
 enum FieldType {
     case simpleMessage(description: String)
-    case doubleInput(firtsTitleInput: String, secondTitleInput: String, validationError: String)
+    case simpleInput(title: String, input: String)
+    case doubleInput(
+        firtsTitleInput: String,
+        firstInput: String,
+        secondTitleInput: String,
+        secondInput: String,
+        validationError: String
+    )
     case addOrRemoveInput(addTitle: String, removeTitle: String)
     case simpleAction(title: String)
     
     var cellType: FieldCellType {
         switch self {
         case .simpleMessage(_):
-            return DoubleInputHeaderCell.dequeueCell
-        case .doubleInput(_, _, _):
+            return SimpleDescriptionCell.dequeueCell
+        case .simpleInput(_, _):
+            return SimpleInputCell.dequeueCell
+        case .doubleInput(_, _, _, _, _):
             return DoubleInputCell.dequeueCell
         case .addOrRemoveInput(_, _):
             return AddOrRemoveDoubleInputCell.dequeueCell
@@ -35,10 +44,22 @@ extension FieldType: Equatable {
         case (.simpleMessage(let leftDescription), .simpleMessage(let rightDescription)):
             return leftDescription == rightDescription
             
-        case (.doubleInput(let leftFirtsTitleInput, let leftSecondTitleInput, let leftValidationError),
-              .doubleInput(let rightFirtsTitleInput, let rightSecondTitleInput, let rightValidationError)):
+        case (.doubleInput(
+            let leftFirtsTitleInput,
+            let leftFirstInput,
+            let leftSecondTitleInput,
+            let leftSecondInput,
+            let leftValidationError),
+              .doubleInput(
+                let rightFirtsTitleInput,
+                let rightFirstInput,
+                let rightSecondTitleInput,
+                let rightSecondInput,
+                let rightValidationError)):
             return leftFirtsTitleInput == rightFirtsTitleInput
+                && leftFirstInput == rightFirstInput
                 && leftSecondTitleInput == rightSecondTitleInput
+                && leftSecondInput == rightSecondInput
                 && leftValidationError == rightValidationError
             
         case (.addOrRemoveInput(let leftAddTitle, let leftRemoveTitle),
@@ -73,12 +94,16 @@ typealias FormViewStateAction = (FormViewState) -> Void
 
 protocol FormPresenterInterface: class {
     var sections: UInt { get }
+    var cleanText: String { get }
     var formViewStateAction: FormViewStateAction? { get set }
     
+    func setSimpleInput(_ newValue: String, at index: IndexPath)
+    func setDoubleInput(_ newValue: String, at index: IndexPath)
     func fields(for section: UInt) -> [FieldType]
     func removeDoubleInput(at index: UInt?)
     func addDoubleInput(at index: UInt?)
     func calculateNote()
+    func cleanNotes()
     func createRemoveOrAddAction(for indexPath: IndexPath) -> RemoveOrAddTypeAction
     
     init(interactor: NotesInteractorInterface)

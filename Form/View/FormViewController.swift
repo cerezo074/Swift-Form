@@ -26,18 +26,28 @@ class FormViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Calculadora"
         configureFormCollectionView()
         bindFormViewState()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        configureCleanAction()
     }
 
 }
 
 private extension FormViewController {
+    
+    func configureCleanAction() {
+        let cleanButton = UIBarButtonItem(title: presenter.cleanText,
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(cleanAction))
+        
+        navigationItem.rightBarButtonItem = cleanButton
+    }
+    
+    @objc func cleanAction() {
+        presenter.cleanNotes()
+    }
     
     func configureFormCollectionView() {
         for section in 0 ..< presenter.sections {

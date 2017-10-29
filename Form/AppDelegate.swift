@@ -18,7 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         // Override point for customization after application launch.
         // TODO: Substitute UIViewController with your own subclass.
-        self.window!.rootViewController = NotesModuleLoader().view
+        let notesNavigation = UINavigationController(rootViewController: NotesModuleLoader().view)
+        self.window!.rootViewController = notesNavigation
         self.window!.backgroundColor = UIColor.white
         self.window!.makeKeyAndVisible()
         return true

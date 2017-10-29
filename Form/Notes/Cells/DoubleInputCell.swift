@@ -25,12 +25,14 @@ class DoubleInputCell: UITableViewCell, DequeueAbleCell {
     }
 
     func update(with field: FieldType) {
-        guard case let .doubleInput(firstTitleInput, secondTitleInput, error) = field  else {
+        guard case let .doubleInput(firstTitleInput, firstInput, secondTitleInput, secondInput, error) = field  else {
             return
         }
         
         firstInputTitleLabel.text = firstTitleInput
+        firstInputTextField.text = firstInput
         secondInputTitleLabel.text = secondTitleInput
+        secondInputTextField.text = secondInput
         InvalidMessageLabel.text = error
     }
     

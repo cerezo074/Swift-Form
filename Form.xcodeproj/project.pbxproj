@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		E60842B91FA52EAD00B8D61C /* NotesInteractorInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60842B81FA52EAD00B8D61C /* NotesInteractorInterface.swift */; };
 		E60842BB1FA5311800B8D61C /* NotesInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60842BA1FA5311800B8D61C /* NotesInteractor.swift */; };
+		E61821601FA58BFE006551FF /* NoteCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618215F1FA58BFE006551FF /* NoteCalculator.swift */; };
+		E61821691FA59DBA006551FF /* SimpleInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61821671FA59DBA006551FF /* SimpleInputCell.swift */; };
+		E618216A1FA59DBA006551FF /* SimpleInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E61821681FA59DBA006551FF /* SimpleInputCell.xib */; };
 		E63AE0C01F9D488F002FE2CC /* NotesModuleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63AE0BF1F9D488F002FE2CC /* NotesModuleLoader.swift */; };
 		E63AE0C41F9D6A13002FE2CC /* FormPresenterInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63AE0C31F9D6A13002FE2CC /* FormPresenterInterface.swift */; };
 		E6D3364A1F9D103A00363C9C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D336491F9D103A00363C9C /* AppDelegate.swift */; };
@@ -25,8 +28,8 @@
 		E6D3368C1F9D17F900363C9C /* DoubleInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6D3368A1F9D17F800363C9C /* DoubleInputCell.xib */; };
 		E6D3368D1F9D17F900363C9C /* DoubleInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D3368B1F9D17F900363C9C /* DoubleInputCell.swift */; };
 		E6D336901F9D1F9500363C9C /* Collection+Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D3368F1F9D1F9500363C9C /* Collection+Bounds.swift */; };
-		E6D336931F9D2BF200363C9C /* DoubleInputHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D336911F9D2BF200363C9C /* DoubleInputHeaderCell.swift */; };
-		E6D336941F9D2BF200363C9C /* DoubleInputHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6D336921F9D2BF200363C9C /* DoubleInputHeaderCell.xib */; };
+		E6D336931F9D2BF200363C9C /* SimpleDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D336911F9D2BF200363C9C /* SimpleDescriptionCell.swift */; };
+		E6D336941F9D2BF200363C9C /* SimpleDescriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6D336921F9D2BF200363C9C /* SimpleDescriptionCell.xib */; };
 		E6D336971F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D336951F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift */; };
 		E6D336981F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6D336961F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib */; };
 /* End PBXBuildFile section */
@@ -51,6 +54,9 @@
 /* Begin PBXFileReference section */
 		E60842B81FA52EAD00B8D61C /* NotesInteractorInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesInteractorInterface.swift; sourceTree = "<group>"; };
 		E60842BA1FA5311800B8D61C /* NotesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesInteractor.swift; sourceTree = "<group>"; };
+		E618215F1FA58BFE006551FF /* NoteCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCalculator.swift; sourceTree = "<group>"; };
+		E61821671FA59DBA006551FF /* SimpleInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SimpleInputCell.swift; path = Notes/Cells/SimpleInputCell.swift; sourceTree = "<group>"; };
+		E61821681FA59DBA006551FF /* SimpleInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SimpleInputCell.xib; path = Notes/Cells/SimpleInputCell.xib; sourceTree = "<group>"; };
 		E63AE0BF1F9D488F002FE2CC /* NotesModuleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotesModuleLoader.swift; path = Notes/NotesModuleLoader.swift; sourceTree = "<group>"; };
 		E63AE0C31F9D6A13002FE2CC /* FormPresenterInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FormPresenterInterface.swift; path = Notes/FormPresenterInterface.swift; sourceTree = "<group>"; };
 		E6D336461F9D103A00363C9C /* Form.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Form.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,8 +79,8 @@
 		E6D3368A1F9D17F800363C9C /* DoubleInputCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DoubleInputCell.xib; path = Notes/Cells/DoubleInputCell.xib; sourceTree = "<group>"; };
 		E6D3368B1F9D17F900363C9C /* DoubleInputCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DoubleInputCell.swift; path = Notes/Cells/DoubleInputCell.swift; sourceTree = "<group>"; };
 		E6D3368F1F9D1F9500363C9C /* Collection+Bounds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Collection+Bounds.swift"; sourceTree = "<group>"; };
-		E6D336911F9D2BF200363C9C /* DoubleInputHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DoubleInputHeaderCell.swift; path = Notes/Cells/DoubleInputHeaderCell.swift; sourceTree = "<group>"; };
-		E6D336921F9D2BF200363C9C /* DoubleInputHeaderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DoubleInputHeaderCell.xib; path = Notes/Cells/DoubleInputHeaderCell.xib; sourceTree = "<group>"; };
+		E6D336911F9D2BF200363C9C /* SimpleDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SimpleDescriptionCell.swift; path = Notes/Cells/SimpleDescriptionCell.swift; sourceTree = "<group>"; };
+		E6D336921F9D2BF200363C9C /* SimpleDescriptionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SimpleDescriptionCell.xib; path = Notes/Cells/SimpleDescriptionCell.xib; sourceTree = "<group>"; };
 		E6D336951F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddOrRemoveDoubleInputCell.swift; path = Notes/Cells/AddOrRemoveDoubleInputCell.swift; sourceTree = "<group>"; };
 		E6D336961F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AddOrRemoveDoubleInputCell.xib; path = Notes/Cells/AddOrRemoveDoubleInputCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,10 +113,19 @@
 		E60842B71FA52E8E00B8D61C /* Interactor */ = {
 			isa = PBXGroup;
 			children = (
+				E618215E1FA58BE9006551FF /* Services */,
 				E60842B81FA52EAD00B8D61C /* NotesInteractorInterface.swift */,
 				E60842BA1FA5311800B8D61C /* NotesInteractor.swift */,
 			);
 			path = Interactor;
+			sourceTree = "<group>";
+		};
+		E618215E1FA58BE9006551FF /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E618215F1FA58BFE006551FF /* NoteCalculator.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		E63AE0C51F9D6A18002FE2CC /* Presenter */ = {
@@ -198,14 +213,16 @@
 		E6D336811F9D172E00363C9C /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				E6D336911F9D2BF200363C9C /* DoubleInputHeaderCell.swift */,
-				E6D336921F9D2BF200363C9C /* DoubleInputHeaderCell.xib */,
+				E6D336911F9D2BF200363C9C /* SimpleDescriptionCell.swift */,
+				E6D336921F9D2BF200363C9C /* SimpleDescriptionCell.xib */,
 				E6D3368B1F9D17F900363C9C /* DoubleInputCell.swift */,
 				E6D3368A1F9D17F800363C9C /* DoubleInputCell.xib */,
 				E6D336951F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift */,
 				E6D336961F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib */,
 				E6D336861F9D17E500363C9C /* SimpleActionCell.swift */,
 				E6D336871F9D17E500363C9C /* SimpleActionCell.xib */,
+				E61821671FA59DBA006551FF /* SimpleInputCell.swift */,
+				E61821681FA59DBA006551FF /* SimpleInputCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -328,10 +345,11 @@
 			files = (
 				E6D3364C1F9D103A00363C9C /* Assets.xcassets in Resources */,
 				E6D336891F9D17E500363C9C /* SimpleActionCell.xib in Resources */,
-				E6D336941F9D2BF200363C9C /* DoubleInputHeaderCell.xib in Resources */,
+				E6D336941F9D2BF200363C9C /* SimpleDescriptionCell.xib in Resources */,
 				E6D3364F1F9D103A00363C9C /* LaunchScreen.storyboard in Resources */,
 				E6D3368C1F9D17F900363C9C /* DoubleInputCell.xib in Resources */,
 				E6D336981F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib in Resources */,
+				E618216A1FA59DBA006551FF /* SimpleInputCell.xib in Resources */,
 				E6D3367B1F9D10CF00363C9C /* FormViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,9 +379,11 @@
 				E6D336971F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift in Sources */,
 				E60842B91FA52EAD00B8D61C /* NotesInteractorInterface.swift in Sources */,
 				E6D336901F9D1F9500363C9C /* Collection+Bounds.swift in Sources */,
-				E6D336931F9D2BF200363C9C /* DoubleInputHeaderCell.swift in Sources */,
+				E61821691FA59DBA006551FF /* SimpleInputCell.swift in Sources */,
+				E6D336931F9D2BF200363C9C /* SimpleDescriptionCell.swift in Sources */,
 				E6D3364A1F9D103A00363C9C /* AppDelegate.swift in Sources */,
 				E63AE0C41F9D6A13002FE2CC /* FormPresenterInterface.swift in Sources */,
+				E61821601FA58BFE006551FF /* NoteCalculator.swift in Sources */,
 				E6D336801F9D115600363C9C /* FormPresenter.swift in Sources */,
 				E63AE0C01F9D488F002FE2CC /* NotesModuleLoader.swift in Sources */,
 				E6D336881F9D17E500363C9C /* SimpleActionCell.swift in Sources */,

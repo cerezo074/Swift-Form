@@ -13,7 +13,7 @@ class NotesInteractor: NotesInteractorInterface {
     private let calculatorService: NotesCalculatorProtocol
     
     init(calculatorService: NotesCalculatorProtocol?) {
-        self.calculatorService = calculatorService ?? NotesCalculator()
+        self.calculatorService = calculatorService ?? NoteCalculator()
     }
     
     func notesAreValid(_ notes: [Score]) -> Bool {
@@ -32,15 +32,12 @@ class NotesInteractor: NotesInteractorInterface {
     }
     
     func calculeNote(_ notes: [Score], desiredNote: Float) -> Float {
-        return calculatorService.caculateNotes(with: notes, diseredNote: desiredNote)
+        return calculatorService.caculateNotes(with: notes, desiredNote: desiredNote)
     }
     
-}
+    func remainingPercentage(with notes: [Score], desiredNote: Float) -> Float {
+        return calculatorService.getRemainingPercentage(with: notes, desiredNote: desiredNote)
+    }
 
-class NotesCalculator: NotesCalculatorProtocol {
-    
-    func caculateNotes(with notes: [Score], diseredNote: Float) -> Float {
-        return 0.0
-    }
     
 }

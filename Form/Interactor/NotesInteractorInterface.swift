@@ -8,13 +8,8 @@
 
 import Foundation
 
-typealias Score = (note: Float, percentage: Float)
-
-protocol NotesCalculatorProtocol {
-    func caculateNotes(with notes: [Score], diseredNote: Float) -> Float
-}
-
 protocol NotesInteractorInterface {
     func notesAreValid(_ notes: [Score]) -> Bool
     func calculeNote(_ notes: [Score], desiredNote: Float) -> Float
+    func remainingPercentage(with notes: [Score], desiredNote: Float) -> Float
 }

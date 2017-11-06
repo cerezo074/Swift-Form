@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E60842B91FA52EAD00B8D61C /* NotesInteractorInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60842B81FA52EAD00B8D61C /* NotesInteractorInterface.swift */; };
 		E60842BB1FA5311800B8D61C /* NotesInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60842BA1FA5311800B8D61C /* NotesInteractor.swift */; };
+		E60A892B1FAFC3050085B19F /* ResultWithTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A89291FAFC3050085B19F /* ResultWithTitleCell.swift */; };
+		E60A892C1FAFC3050085B19F /* ResultWithTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E60A892A1FAFC3050085B19F /* ResultWithTitleCell.xib */; };
 		E61821601FA58BFE006551FF /* NoteCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E618215F1FA58BFE006551FF /* NoteCalculator.swift */; };
 		E61821691FA59DBA006551FF /* SimpleInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61821671FA59DBA006551FF /* SimpleInputCell.swift */; };
 		E618216A1FA59DBA006551FF /* SimpleInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E61821681FA59DBA006551FF /* SimpleInputCell.xib */; };
@@ -54,6 +56,8 @@
 /* Begin PBXFileReference section */
 		E60842B81FA52EAD00B8D61C /* NotesInteractorInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesInteractorInterface.swift; sourceTree = "<group>"; };
 		E60842BA1FA5311800B8D61C /* NotesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesInteractor.swift; sourceTree = "<group>"; };
+		E60A89291FAFC3050085B19F /* ResultWithTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResultWithTitleCell.swift; path = Notes/Cells/ResultWithTitleCell.swift; sourceTree = "<group>"; };
+		E60A892A1FAFC3050085B19F /* ResultWithTitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ResultWithTitleCell.xib; path = Notes/Cells/ResultWithTitleCell.xib; sourceTree = "<group>"; };
 		E618215F1FA58BFE006551FF /* NoteCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCalculator.swift; sourceTree = "<group>"; };
 		E61821671FA59DBA006551FF /* SimpleInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SimpleInputCell.swift; path = Notes/Cells/SimpleInputCell.swift; sourceTree = "<group>"; };
 		E61821681FA59DBA006551FF /* SimpleInputCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SimpleInputCell.xib; path = Notes/Cells/SimpleInputCell.xib; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 				E6D3368A1F9D17F800363C9C /* DoubleInputCell.xib */,
 				E6D336951F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift */,
 				E6D336961F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib */,
+				E60A89291FAFC3050085B19F /* ResultWithTitleCell.swift */,
+				E60A892A1FAFC3050085B19F /* ResultWithTitleCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -347,6 +353,7 @@
 				E6D336891F9D17E500363C9C /* SimpleActionCell.xib in Resources */,
 				E6D336941F9D2BF200363C9C /* SimpleDescriptionCell.xib in Resources */,
 				E6D3364F1F9D103A00363C9C /* LaunchScreen.storyboard in Resources */,
+				E60A892C1FAFC3050085B19F /* ResultWithTitleCell.xib in Resources */,
 				E6D3368C1F9D17F900363C9C /* DoubleInputCell.xib in Resources */,
 				E6D336981F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.xib in Resources */,
 				E618216A1FA59DBA006551FF /* SimpleInputCell.xib in Resources */,
@@ -376,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6D3367E1F9D10EE00363C9C /* FormDataSource.swift in Sources */,
+				E60A892B1FAFC3050085B19F /* ResultWithTitleCell.swift in Sources */,
 				E6D336971F9D2C2A00363C9C /* AddOrRemoveDoubleInputCell.swift in Sources */,
 				E60842B91FA52EAD00B8D61C /* NotesInteractorInterface.swift in Sources */,
 				E6D336901F9D1F9500363C9C /* Collection+Bounds.swift in Sources */,

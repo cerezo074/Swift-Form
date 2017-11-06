@@ -27,10 +27,10 @@ class FormPresenter: FormPresenterInterface {
         }
     }
     
+    private var result: FieldType?
     private var simpleInput: FieldType = .simpleInput(title: "Nota Deseada",
                                                       input: "",
                                                       validationError: "")
-
     private var doubleInputFields: [FieldType] = [FormPresenter.defaultDoubleInput]
     private var doubleInputIntructionsMessage: String {
         return "adoedmwed ewod wedwiopemdw edopqiwed qwoepdqwmed qwoedinqwe diqwed#"
@@ -58,6 +58,12 @@ class FormPresenter: FormPresenterInterface {
             return [.addOrRemoveInput(addTitle: "", removeTitle: "")]
         case .simpleInput:
             return [simpleInput]
+        case .result:
+            guard let result = result else {
+                return []
+            }
+            
+            return [result]
         case .action:
             return [.simpleAction(title: "Calcula tu Nota")]
         }
@@ -111,14 +117,9 @@ class FormPresenter: FormPresenterInterface {
     }
     
     func setDoubleInput(firstInput: String, secondInput: String, at index: IndexPath) {
-        guard isValidSection(of: .doubleInput, at: index) else {
-            print("Invalid section to be updated \(index.section), it should be of Double Input type")
-            return
-        }
-        
         guard let newDoubleInput = updateDoubleInput(firtsInput: firstInput,
                                                      secondInput: secondInput,
-                                                     errorDescription: "",
+                                                     errorDescription: nil,
                                                      at: index) else { return }
         
         doubleInputFields[index.row] = newDoubleInput
@@ -130,9 +131,6 @@ class FormPresenter: FormPresenterInterface {
             return
         }
         
-        cleanSimpleErrors()
-        cleanDoubleInputErrors()
-        
         if let inputValidationErrors = inputValidationErrors {
             processValidationErrors(inputValidationErrors)
             return
@@ -143,10 +141,54 @@ class FormPresenter: FormPresenterInterface {
             return
         }
         
-        let noteCalculated = interactor.calculeNote(rawNotes,
-                                                    desiredNote: desiredNoteValue)
+        let calculatedNote = interactor.calculeNote(rawNotes,
+                                        desiredNote: desiredNoteValue)
+        let result = FieldType.result(title: "Necesitas...", message: "\(calculatedNote.note) en el \(calculatedNote.remainingPercentage)%")
+        updateViewForResult(result)
+    }
+    
+    func updateViewForResult(_ result: FieldType) {
+        let resultIndexPath = [IndexPath(row: 0, section: FormSection.result.rawValue)]
+        let errorIndexes = removeInvalidErrorsOnDoubleInputFields(with: nil) + removeInvalidErrorsOnSimpleInputFields(with: nil)
         
-        //TODO: Clean errors(with view state) if they exists and show results(note calculated, remaining percentage and percentage acumulated)
+        if self.result != nil {
+            self.result = result
+            formViewState = .showResult(indexPaths: errorIndexes + resultIndexPath, add: false)
+            
+            return
+        }
+        
+        self.result = result
+        if errorIndexes.isEmpty {
+//            formViewState = .showResult(indexPaths: resultIndexPath, add: true)
+            return
+        }
+
+        formViewState = .showValidationErrors(indexPaths: errorIndexes)
+        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+//            self?.formViewState = .addedInput(indexPaths: resultIndexPath)
+//        }
+    }
+    
+    func updateViewForErrors(errorIndexes: [IndexPath]) {
+        guard !errorIndexes.isEmpty else {
+            return
+        }
+        
+        let resultIndexPath = [IndexPath(row: 0, section: FormSection.result.rawValue)]
+        
+        guard result != nil else {
+            formViewState = .showValidationErrors(indexPaths: errorIndexes)
+            return
+        }
+        
+        result = nil
+        formViewState = .deleteResults(indexPath: resultIndexPath)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.formViewState = .showValidationErrors(indexPaths: errorIndexes)
+        }
     }
     
     func cleanNotes() {
@@ -282,25 +324,26 @@ private extension FormPresenter {
         
         if let simpleInputErrors = errors[ValidationErrorType.simpleInput.rawValue] as? ScoreError {
             errorIndexPaths += processSimpleInputError(simpleInputErrors)
+        } else {
+            errorIndexPaths += removeInvalidErrorsOnSimpleInputFields(with: nil)
         }
         
         if let doubleInputErrors = errors[ValidationErrorType.doubleInput.rawValue] as? [ScoreErrorResult] {
             errorIndexPaths += processDoubleInputErrors(doubleInputErrors)
+        } else {
+            errorIndexPaths += removeInvalidErrorsOnDoubleInputFields(with: nil)
         }
         
-        formViewState = .showValidationErrors(indexPaths: errorIndexPaths)
+        updateViewForErrors(errorIndexes: errorIndexPaths)
     }
     
     func processDoubleInputErrors(_ errors: [ScoreErrorResult]) -> [IndexPath] {
-        var errorIndexPaths: [IndexPath] = []
+        var errorIndexPaths: [IndexPath] = removeInvalidErrorsOnDoubleInputFields(with: errors)
         
-        for (index, doubleInput) in doubleInputFields.enumerated() {
-            guard case .doubleInput(_, _, _, _, _) = doubleInput,
-                let scoreErrors = errors[safe: index] else {
-                    continue
-            }
+        for error in errors {
+            let index = Int(error.index)
             
-            let errorDescriptions = errorText(for: scoreErrors.errors)
+            let errorDescriptions = errorText(for: error.errors)
             guard updateDoubleInputError(error: errorDescriptions, at: index) else {
                 continue
             }
@@ -310,15 +353,6 @@ private extension FormPresenter {
         }
         
         return errorIndexPaths
-    }
-    
-    func processSimpleInputError(_ error: ScoreError) -> [IndexPath] {
-        let errorDescriptions = errorText(for: [error])
-        guard updateSimpleInputError(error: errorDescriptions) else {
-            return []
-        }
-        
-        return [IndexPath(row: 0, section: FormSection.simpleInput.rawValue)]
     }
     
     func updateDoubleInputError(error: String, at index: Int) -> Bool {
@@ -334,6 +368,61 @@ private extension FormPresenter {
         
         doubleInputFields[index] = doubleInputUpdated
         return true
+    }
+    
+    func removeInvalidErrorsOnDoubleInputFields(with validErrors: [ScoreErrorResult]?) -> [IndexPath] {
+        let validIndexes = validErrors?.map { Int($0.index) } ?? []
+        var invalidIndexes: [IndexPath] = []
+        
+        for (possibleInvalidIndex, field) in doubleInputFields.enumerated() {
+            let possibleInvalidIndexPath = IndexPath(row: possibleInvalidIndex, section: FormSection.doubleInput.rawValue)
+            
+            guard case let .doubleInput(_, _, _, _, validationError) = field else {
+                continue
+            }
+            
+            if let updatedFieldWithoutErrors = field.cleanDoubleInputError(),
+                validIndexes.isEmpty,
+                !validationError.isEmpty {
+                doubleInputFields[possibleInvalidIndex] = updatedFieldWithoutErrors
+                invalidIndexes.append(possibleInvalidIndexPath)
+                continue
+            }
+            
+            guard let updatedFieldWithoutErrors = field.cleanDoubleInputError(),
+                !validationError.isEmpty else {
+                    continue
+            }
+            
+            guard !validIndexes.contains(possibleInvalidIndex) || validErrors != nil else {
+                continue
+            }
+            
+            doubleInputFields[possibleInvalidIndex] = updatedFieldWithoutErrors
+            invalidIndexes.append(possibleInvalidIndexPath)
+        }
+        
+        return invalidIndexes
+    }
+    
+    func processSimpleInputError(_ error: ScoreError) -> [IndexPath] {
+        let errorDescriptions = errorText(for: [error])
+        guard updateSimpleInputError(error: errorDescriptions) else {
+            return removeInvalidErrorsOnSimpleInputFields(with: error)
+        }
+        
+        return [IndexPath(row: 0, section: FormSection.simpleInput.rawValue)]
+    }
+    
+    func removeInvalidErrorsOnSimpleInputFields(with validErrors: ScoreError?) -> [IndexPath] {
+        guard case let .simpleInput(_ ,_ , validationError) = simpleInput,
+            !validationError.isEmpty else {
+                return []
+        }
+        
+        cleanSimpleErrors()
+        
+        return [IndexPath(row: 0, section: FormSection.simpleInput.rawValue)]
     }
     
     func updateSimpleInputError(error: String) -> Bool {
@@ -359,7 +448,7 @@ private extension FormPresenter {
                             validationError: "")
     }
     
-    func updateDoubleInput(firtsInput: String, secondInput: String, errorDescription: String, at index: IndexPath) -> FieldType? {
+    func updateDoubleInput(firtsInput: String, secondInput: String, errorDescription: String? = nil, at index: IndexPath) -> FieldType? {
         guard let section = FormSection(rawValue: index.section),
             section == .doubleInput else {
                 print("Invalid section to be updated \(index.section), it should be of doubleInput type")

@@ -72,11 +72,11 @@ private extension FormViewController {
             
             switch state {
             case .addedInput(let indexPaths):
-                self.addCell(at: indexPaths)
+                self.addCells(at: indexPaths)
             case .deletedInput(let indexPaths):
-                self.removeCell(at: indexPaths)
-            case .showResult(let indexPaths):
-                self.showResult(at: indexPaths)
+                self.removeCells(at: indexPaths)
+            case .showResult(let indexPaths, let shouldAdd):
+                self.showResults(at: indexPaths, add: shouldAdd)
             case .showValidationErrors(let indexPaths):
                 self.showValidationErrors(at: indexPaths)
             case .showMessageToUser(let title, let message):
@@ -87,15 +87,20 @@ private extension FormViewController {
         }
     }
     
-    func addCell(at indexes: [IndexPath]) {
+    func addCells(at indexes: [IndexPath]) {
         formTableView.insertRows(at: indexes, with: .automatic)
     }
     
-    func removeCell(at indexes: [IndexPath]) {
+    func removeCells(at indexes: [IndexPath]) {
         formTableView.deleteRows(at: indexes, with: .automatic)
     }
     
-    func showResult(at indexes: [IndexPath]) {
+    func showResults(at indexes: [IndexPath], add: Bool) {
+        if add {
+//            formTableView.insertRows(at: indexes, with: .automatic)
+            return
+        }
+        
         formTableView.reloadRows(at: indexes, with: .automatic)
     }
     
@@ -111,7 +116,6 @@ private extension FormViewController {
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
-
     
 }
 

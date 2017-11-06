@@ -13,10 +13,11 @@ enum FormSection: Int {
     case doubleInput
     case addOrRemove
     case simpleInput
+    case result
     case action
     
     static var sections: UInt {
-        return 5
+        return 6
     }
 }
 
@@ -32,6 +33,7 @@ enum FieldType {
         secondInput: String,
         validationError: String
     )
+    case result(title: String, message: String)
 }
 
 extension FieldType {
@@ -48,6 +50,8 @@ extension FieldType {
             return AddOrRemoveDoubleInputCell.dequeueCell
         case .simpleAction(_):
             return SimpleActionCell.dequeueCell
+        case .result(_, _):
+            return ResultWithTitleCell.dequeueCell
         }
     }
     
@@ -136,7 +140,8 @@ enum FormViewState {
     case addedInput(indexPaths: [IndexPath])
     case deletedInput(indexPaths: [IndexPath])
     case showValidationErrors(indexPaths: [IndexPath])
-    case showResult(indexPaths: [IndexPath])
+    case showResult(indexPaths: [IndexPath], add: Bool)
+    case deleteResults(indexPath: [IndexPath])
     case showMessageToUser(title: String, message: String)
 }
 

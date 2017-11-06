@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias NoteCalculated = (note: Float, acumulatedPercentage: Float, remainingPercentage: Float)
+
 class NotesInteractor: NotesInteractorInterface {
     
     struct ValidationRanges {
@@ -51,24 +53,22 @@ class NotesInteractor: NotesInteractorInterface {
         return errors
     }
     
-    func calculeNote(_ rawScores: [RawScore], desiredNote: Float) -> Float {
+    func calculeNote(_ rawScores: [RawScore], desiredNote: Float) -> NoteCalculated {
         let scores = getScores(from: rawScores)
         
         guard !scores.isEmpty else {
-            return 0.0
+            return NoteCalculated(note: 0,
+                                  acumulatedPercentage: 0,
+                                  remainingPercentage: 0)
         }
         
-        return calculatorService.caculateNotes(with: scores, desiredNote: desiredNote)
-    }
-    
-    func remainingPercentage(with rawScores: [RawScore], desiredNote: Float) -> Float {
-        let scores = getScores(from: rawScores)
+        let note = calculatorService.caculateNotes(with: scores, desiredNote: desiredNote)
+        let remainingPercentage = calculatorService.getRemainingPercentage(with: scores, desiredNote: desiredNote)
+        let acumulatedPercentage: Float = abs(100 - remainingPercentage)
         
-        guard !scores.isEmpty else {
-            return 0.0
-        }
-        
-        return calculatorService.getRemainingPercentage(with: scores, desiredNote: desiredNote)
+        return NoteCalculated(note: note,
+                              acumulatedPercentage: acumulatedPercentage,
+                              remainingPercentage: remainingPercentage)
     }
     
     private func getScores(from rawScores: [RawScore]) -> [Score] {

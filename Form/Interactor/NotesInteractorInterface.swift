@@ -34,6 +34,5 @@ enum ScoreError: LocalizedError {
 protocol NotesInteractorInterface {
     func desiredNoteIsValid(_ note: String) -> ScoreError?
     func notesAreValid(_ rawScores: [RawScore]) -> [ScoreErrorResult]
-    func calculeNote(_ rawScores: [RawScore], desiredNote: Float) -> Float
-    func remainingPercentage(with rawScores: [RawScore], desiredNote: Float) -> Float
+    func calculeNote(_ rawScores: [RawScore], desiredNote: Float) -> NoteCalculated
 }

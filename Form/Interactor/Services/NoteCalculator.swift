@@ -29,7 +29,7 @@ class NoteCalculator: NotesCalculatorProtocol {
         let acumulatedPercentages = notes.reduce(0.0) { $0 + ($1.percentage) }
         let remainingPercentage = 100 - acumulatedPercentages
         
-        return remainingPercentage
+        return abs(remainingPercentage)
     }
     
 }

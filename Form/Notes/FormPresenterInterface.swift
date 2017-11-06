@@ -19,6 +19,24 @@ enum FormSection: Int {
     static var sections: UInt {
         return 6
     }
+    
+    var cellType: FieldCellType {
+        switch self {
+        case .information:
+            return FieldType.simpleMessage(description: "").cellType
+        case .simpleInput:
+            return FieldType.simpleInput(title: "", input: "", validationError: "").cellType
+        case .doubleInput:
+            return FieldType.doubleInput(firtsTitleInput: "", firstInput: "", secondTitleInput: "", secondInput: "", validationError: "").cellType
+        case .addOrRemove:
+            return FieldType.addOrRemoveInput(addTitle: "", removeTitle: "").cellType
+        case .action:
+            return FieldType.simpleAction(title: "").cellType
+        case .result:
+            return FieldType.result(title: "", message: "").cellType
+        }
+    }
+    
 }
 
 enum FieldType {
@@ -55,6 +73,28 @@ extension FieldType {
         }
     }
     
+    var isEmpty: Bool {
+        switch self {
+        case .simpleMessage(let description):
+            return description.isEmpty
+            
+        case .doubleInput(_, let firstInput, _, let secondInput, let validationError):
+            return firstInput.isEmpty && secondInput.isEmpty && validationError.isEmpty
+            
+        case .addOrRemoveInput(_, _):
+            return true
+            
+        case .simpleAction(_):
+            return true
+            
+        case .result(_, let message):
+            return message.isEmpty
+            
+        case .simpleInput(_, let input, let validationError):
+            return input.isEmpty && validationError.isEmpty
+        }
+    }
+
     func updateSimpleInput(_ input: String? = nil, error: String? = nil) -> FieldType? {
         guard case let .simpleInput(title, oldInput, oldError) = self else {
             return nil
@@ -123,6 +163,9 @@ extension FieldType: Equatable {
         case (.simpleAction(let leftTitle), .simpleAction(let rightTitle)):
             return leftTitle == rightTitle
             
+        case (.result(let leftTitle, let leftMessage), .result(let rightTitle, let rightMessage)):
+            return leftTitle == rightTitle && leftMessage == rightMessage
+            
         default:
             return false
         }
@@ -137,12 +180,13 @@ enum RemoveOrAddType {
 
 enum FormViewState {
     case idle
-    case addedInput(indexPaths: [IndexPath])
-    case deletedInput(indexPaths: [IndexPath])
+    case addedInputs(indexPaths: [IndexPath])
+    case deletedInputs(indexPaths: [IndexPath])
     case showValidationErrors(indexPaths: [IndexPath])
-    case showResult(indexPaths: [IndexPath], add: Bool)
-    case deleteResults(indexPath: [IndexPath])
+    case showResults(indexPaths: [IndexPath], errors: [IndexPath])
+    case deleteResults(indexPath: [IndexPath], errors: [IndexPath])
     case showMessageToUser(title: String, message: String)
+    case cleanInputs(indexPaths: [IndexPath], results: [IndexPath])
 }
 
 typealias RemoveOrAddTypeAction = (RemoveOrAddType) -> Void
@@ -160,6 +204,7 @@ protocol FormPresenterInterface: class {
     var sections: UInt { get }
     var cleanText: String { get }
     var formViewStateAction: FormViewStateAction? { get set }
+    var sectionTypes: [FormSection] { get }
     
     func setSimpleInput(_ newValue: String, at index: IndexPath)
     func setDoubleInput(firstInput: String, secondInput: String, at index: IndexPath)

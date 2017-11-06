@@ -50,13 +50,7 @@ private extension FormViewController {
     }
     
     func configureFormCollectionView() {
-        for section in 0 ..< presenter.sections {
-            presenter.fields(for: section).forEach {
-                formTableView.register($0.cellType.nib,
-                                       forCellReuseIdentifier: $0.cellType.cellIdentifier)
-            }
-        }
-        
+        dataSource.registerCells(on: formTableView, for: presenter.sectionTypes)
         formTableView.tableFooterView = UIView(frame: .zero)
         formTableView.rowHeight = UITableViewAutomaticDimension
         formTableView.estimatedRowHeight = 100
@@ -71,16 +65,20 @@ private extension FormViewController {
             }
             
             switch state {
-            case .addedInput(let indexPaths):
+            case .addedInputs(let indexPaths):
                 self.addCells(at: indexPaths)
-            case .deletedInput(let indexPaths):
+            case .deletedInputs(let indexPaths):
                 self.removeCells(at: indexPaths)
-            case .showResult(let indexPaths, let shouldAdd):
-                self.showResults(at: indexPaths, add: shouldAdd)
             case .showValidationErrors(let indexPaths):
                 self.showValidationErrors(at: indexPaths)
             case .showMessageToUser(let title, let message):
                 self.showMessageToUser(title: title, message: message)
+            case .showResults(let indexPaths, let errorIndexes):
+                self.updateResults(at: indexPaths, errors: errorIndexes)
+            case .deleteResults(let indexPaths, let errorIndexes):
+                self.updateResults(at: indexPaths, errors: errorIndexes)
+            case .cleanInputs(let indexPaths, let resultIndexes):
+                self.reloadInputs(at: indexPaths, results: resultIndexes)
             default:
                 return
             }
@@ -95,15 +93,6 @@ private extension FormViewController {
         formTableView.deleteRows(at: indexes, with: .automatic)
     }
     
-    func showResults(at indexes: [IndexPath], add: Bool) {
-        if add {
-//            formTableView.insertRows(at: indexes, with: .automatic)
-            return
-        }
-        
-        formTableView.reloadRows(at: indexes, with: .automatic)
-    }
-    
     func showValidationErrors(at indexes: [IndexPath]) {
         formTableView.reloadRows(at: indexes, with: .automatic)
     }
@@ -115,6 +104,27 @@ private extension FormViewController {
         
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+    
+    func updateResults(at indexes: [IndexPath], errors: [IndexPath]) {
+        formTableView.performBatchUpdates({ [weak self] in
+            guard let section = indexes.first?.section else { return}
+            let sectionIndexSet = IndexSet(integer: section)
+            self?.formTableView.reloadSections(sectionIndexSet, with: .automatic)
+        }) { [weak self] (completed) in
+            guard !errors.isEmpty else { return }
+            self?.showValidationErrors(at: errors)
+        }
+    }
+    
+    func reloadInputs(at indexes: [IndexPath], results: [IndexPath]) {
+        formTableView.performBatchUpdates({ [weak self] in
+            guard let section = results.first?.section else { return}
+            let sectionIndexSet = IndexSet(integer: section)
+            self?.formTableView.reloadSections(sectionIndexSet, with: .automatic)
+        }) { [weak self] (completed) in
+            self?.formTableView.reloadRows(at: indexes, with: .automatic)
+        }
     }
     
 }

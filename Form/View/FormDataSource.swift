@@ -27,6 +27,12 @@ class FormDataSource: NSObject {
 
 extension FormDataSource: UITableViewDataSource {
     
+    func registerCells(on tableView: UITableView, for fieldSections: [FormSection]) {
+        fieldSections.forEach {
+            tableView.register($0.cellType.nib, forCellReuseIdentifier: $0.cellType.cellIdentifier)
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return Int(presenter?.sections ?? 0)
     }
